@@ -3,5 +3,9 @@
 ./**/__pycache__/**/*
 **/__pycache__/**/*
 */__pycache__/**/*
-__pycache__/**/*
+__pycache__
 /**/__pycache__/* #and the others with just * at the end too
+
+.coverage
+.pytest_cache
+htmlcov
