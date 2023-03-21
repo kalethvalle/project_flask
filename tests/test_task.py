@@ -1,5 +1,4 @@
 import json
-import unittest
 from app import app
 
 def test_get_all_tasks():
