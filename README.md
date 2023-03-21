@@ -3,5 +3,9 @@
 #### Install Dependencies
 - `pip install -r requirements.txt`
 
+#### Execute Test and coverage
+- coverage run -m pytest tests/ 
+- coverage html
+
 #### Run Project
 - `python app.py`
