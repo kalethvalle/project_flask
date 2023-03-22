@@ -20,7 +20,7 @@ jobs:
         run: python -m pytest --cov-report=xml --cov=.
         
   calculate_coverage:
-    needs: run_tests
+    needs: build
     runs-on: ubuntu-latest
     outputs:
       coverage_percent: ${{ steps.calculate_coverage_output.outputs.coverage_percent }}
@@ -37,5 +37,24 @@ jobs:
         coverage_percent=$(( 100 * covered_lines / total_lines ))
         echo "::set-output name=coverage_percent::$coverage_percent%"
 
+  validate_pull_request:
+    needs: calculate_coverage
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check code formatting
+      uses: github/codeql-action/codeql-format@v1
+
+    - name: Run tests with coverage
+      run: pytest --cov-report=xml --cov=.
+
+    - name: Check test coverage
+      run: |
+        coverage xml
+        total_lines=$(xml sel -t -v "count(//line)" coverage.xml)
+        covered_lines=$(xml sel -t -v "count(//line[@hits!=0])" coverage.xml)
+        coverage_percent=$(( 100 * covered_lines / total_lines ))
+        echo "Coverage: $coverage_percent%"
+        if [[ $coverage_percent -lt ${{ env.MIN_COVERAGE_PERCENT }} ]]; then exit 1; fi
+
 env:
-  MIN_COVERAGE_PERCENT: 60
+  MIN_COVERAGE_PERCENT: 80
