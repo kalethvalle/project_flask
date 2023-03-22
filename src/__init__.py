@@ -26,7 +26,7 @@ def create_app(test_config=None):
     sqlite.init_app(app)
 
     from src.controllers import tasks
-    from src.ping import ping
+    from src.controllers import ping
 
     app.register_blueprint(tasks.bp)
     app.register_blueprint(ping.bp)
