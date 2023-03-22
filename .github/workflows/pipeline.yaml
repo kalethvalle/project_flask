@@ -11,12 +11,10 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: "^3.9"
+          python-version: "3.9"
       - name: Install Dependencies
         run: |
-          python -m venv env
-          source env/bin/activate
+          python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install -e .
       - name: Test
-        run: python -m pytest
+        run: pytest
