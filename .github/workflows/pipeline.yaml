@@ -31,7 +31,7 @@ jobs:
     - name: Calculate test coverage
       id: calculate_coverage_output
       run: |
-        coverage xml
+        python -m coverage xml
         total_lines=$(xml sel -t -v "count(//line)" coverage.xml)
         covered_lines=$(xml sel -t -v "count(//line[@hits!=0])" coverage.xml)
         coverage_percent=$(( 100 * covered_lines / total_lines ))
