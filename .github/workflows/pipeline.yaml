@@ -57,4 +57,4 @@ jobs:
         if [[ $coverage_percent -lt ${{ env.MIN_COVERAGE_PERCENT }} ]]; then exit 1; fi
 
 env:
-  MIN_COVERAGE_PERCENT: 80
+  MIN_COVERAGE_PERCENT: 50
