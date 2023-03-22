@@ -17,6 +17,25 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
       - name: Test
-        run: python -m pytest
-        env:
-          MIN_TEST_PASS_PERCENT: 60
+        run: python -m pytest --cov-report=xml --cov=.
+        
+  calculate_coverage:
+    needs: run_tests
+    runs-on: ubuntu-latest
+    outputs:
+      coverage_percent: ${{ steps.calculate_coverage_output.outputs.coverage_percent }}
+    steps:
+    - name: Install coverage package
+      run: pip install coverage
+
+    - name: Calculate test coverage
+      id: calculate_coverage_output
+      run: |
+        coverage xml
+        total_lines=$(xml sel -t -v "count(//line)" coverage.xml)
+        covered_lines=$(xml sel -t -v "count(//line[@hits!=0])" coverage.xml)
+        coverage_percent=$(( 100 * covered_lines / total_lines ))
+        echo "::set-output name=coverage_percent::$coverage_percent%"
+
+env:
+  MIN_COVERAGE_PERCENT: 60
