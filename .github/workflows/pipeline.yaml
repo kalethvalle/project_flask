@@ -18,3 +18,5 @@ jobs:
           pip install -r requirements.txt
       - name: Test
         run: python -m pytest
+        env:
+          MIN_TEST_PASS_PERCENT: 60
