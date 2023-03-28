@@ -2,12 +2,12 @@ name: Project Flask Task
 on:
   pull_request:
     branches: ["master"]
+env:
+  MIN_COVERAGE_PERCENT: 5
 jobs:
   build:
 
     runs-on: ubuntu-latest
-    env:
-      MIN_COVERAGE_PERCENT: 5  
     steps:
       - name: Checkout
         uses: actions/checkout@v2
