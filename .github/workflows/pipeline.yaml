@@ -44,7 +44,7 @@ jobs:
     - name: Install xmlstarlet
       run: |
         sudo apt-get update && sudo apt-get install -y xmlstarlet
-        echo which xml
+        which xml
       
     - name: Calculate coverage percentage
       id: calculate_coverage
