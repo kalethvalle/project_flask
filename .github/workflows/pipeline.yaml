@@ -4,7 +4,10 @@ on:
     branches: ["master"]
 jobs:
   build:
+
     runs-on: ubuntu-latest
+    env:
+      MIN_COVERAGE_PERCENT: 5  
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -42,5 +45,4 @@ jobs:
         coverage_percent=$(( 100 * covered_lines / total_lines ))
         echo "::set-output name=coverage_percent::$coverage_percent%"
 
-env:
-  MIN_COVERAGE_PERCENT: 5
+
