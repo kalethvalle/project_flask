@@ -48,11 +48,12 @@ jobs:
       id: calculate_coverage
       run: |
         coverage xml
-        export PATH="/home/runner:$PATH"
         total_lines=$(xml sel -t -v "count(//line)" coverage.xml)
         covered_lines=$(xml sel -t -v "count(//line[@hits!=0])" coverage.xml)
         coverage_percent=$(( 100 * covered_lines / total_lines ))
         echo "::set-output name=coverage_percent::$coverage_percent"
+      env:
+        PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/bin/xmlstarlet
 
     - name: Check coverage percentage
       run: |
