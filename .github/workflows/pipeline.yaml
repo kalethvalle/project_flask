@@ -42,15 +42,13 @@ jobs:
       run: python -m pytest --cov-report=xml --cov=.
       
     - name: Install xmlstarlet
-      run: |
-        sudo apt-get update && sudo apt-get install -y xmlstarlet
-        which xml
+      run: sudo apt-get update && sudo apt-get install -y xmlstarlet
       
     - name: Calculate coverage percentage
       id: calculate_coverage
       run: |
         coverage xml
-        total_lines=$(path_xml sel -t -v "count(//line)" coverage.xml)
+        total_lines=$(/usr/bin/xml sel -t -v "count(//line)" coverage.xml)
         covered_lines=$(xml sel -t -v "count(//line[@hits!=0])" coverage.xml)
         coverage_percent=$(( 100 * covered_lines / total_lines ))
         echo "::set-output name=coverage_percent::$coverage_percent"
