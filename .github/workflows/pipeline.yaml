@@ -2,12 +2,12 @@ name: Project Flask Task
 on:
   pull_request:
     branches: ["master"]
-env:
-  MIN_COVERAGE_PERCENT: 5
 jobs:
   build:
 
     runs-on: ubuntu-latest
+    env:
+      MIN_COVERAGE_PERCENT: 5
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -29,6 +29,7 @@ jobs:
           exit 1
 
   calculate_coverage:
+    needs: build
     runs-on: ubuntu-latest
     outputs:
       coverage_percent: ${{ steps.calculate_coverage_output.outputs.coverage_percent }}
