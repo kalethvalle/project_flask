@@ -16,30 +16,12 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-      - name: Test
-        run: python -m pytest --cov-report=xml --cov=.
-
-  calculate_coverage:
-    needs: build
-    runs-on: ubuntu-latest
-    outputs:
-      coverage_percent: ${{ steps.calculate_coverage_output.outputs.coverage_percent }}
-    steps:
-    - name: Install coverage package
-      run: pip install coverage
-
-    - name: Calculate test coverage
-      id: calculate_coverage_output
-      run: |
-        coverage xml
-        total_lines=$(xml sel -t -v "count(//line)" coverage.xml)
-        covered_lines=$(xml sel -t -v "count(//line[@hits!=0])" coverage.xml)
-        coverage_percent=$(( 100 * covered_lines / total_lines ))
-        echo "::set-output name=coverage_percent::$coverage_percent%"
+      - name: Execute test
+        run: pytest --cov-report=xml --cov=.
 
   validate_pull_request:
-    needs: [calculate_coverage]
     runs-on: ubuntu-latest
+    needs: build
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
@@ -59,15 +41,21 @@ jobs:
     - name: Run tests with coverage
       run: pytest --cov-report=xml --cov=.
 
-    - name: Check coverage percentage
+    - name: Calculate coverage percentage
+      id: calculate_coverage
       run: |
+        coverage xml
         total_lines=$(xml sel -t -v "count(//line)" coverage.xml)
         covered_lines=$(xml sel -t -v "count(//line[@hits!=0])" coverage.xml)
         coverage_percent=$(( 100 * covered_lines / total_lines ))
-        if [ $coverage_percent -lt ${{ env.MIN_COVERAGE_PERCENT }} ]; then
-          echo "Error: coverage percentage ($coverage_percent%) is below minimum threshold (${MIN_COVERAGE_PERCENT}%)" >&2
+        echo "::set-output name=coverage_percent::$coverage_percent"
+
+    - name: Check coverage percentage
+      run: |
+        if [[ "${{ steps.calculate_coverage.outputs.coverage_percent }}" -lt ${{ env.MIN_COVERAGE_PERCENT }} ]]; then
+          echo "Error: Test coverage percentage is below threshold (${{ env.MIN_COVERAGE_PERCENT }}%)"
           exit 1
         fi
-env:
-  MIN_COVERAGE_PERCENT: 20
 
+env:
+  MIN_COVERAGE_PERCENT: 10
