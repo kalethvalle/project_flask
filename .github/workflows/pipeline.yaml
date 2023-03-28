@@ -48,7 +48,7 @@ jobs:
       id: calculate_coverage
       run: |
         coverage xml
-        export PATH="/usr/bin:$PATH"
+        export PATH="/home/runner:$PATH"
         total_lines=$(xml sel -t -v "count(//line)" coverage.xml)
         covered_lines=$(xml sel -t -v "count(//line[@hits!=0])" coverage.xml)
         coverage_percent=$(( 100 * covered_lines / total_lines ))
