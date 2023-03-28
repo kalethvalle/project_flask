@@ -28,6 +28,10 @@ jobs:
       with:
         ref: ${{ github.event.pull_request.head.sha }}
 
+    - name: Build Docker image
+      run: |
+        docker build -t project:latest .
+
     - name: Setup Python
       uses: actions/setup-python@v2
       with:
@@ -39,15 +43,18 @@ jobs:
         pip install -r requirements.txt
 
     - name: Run tests with coverage
-      run: python -m pytest --cov-report=xml --cov=.
+      run: |
+        docker run -v "$(pwd)":/app project:latest python -m pytest --cov-report=xml --cov=.
       
     - name: Install xmlstarlet
-      run: sudo apt-get update && sudo apt-get install -y xmlstarlet
-      
+      run: |
+        apt-get update && \
+        apt-get install -y xmlstarlet
+
     - name: Calculate coverage percentage
       id: calculate_coverage
       run: |
-        coverage xml
+        docker run -v "$(pwd)":/app project:latest sh -c 'cd /app && coverage xml'
         total_lines=$(xml sel -t -v "count(//line)" coverage.xml)
         covered_lines=$(xml sel -t -v "count(//line[@hits!=0])" coverage.xml)
         coverage_percent=$(( 100 * covered_lines / total_lines ))
