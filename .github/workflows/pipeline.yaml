@@ -17,7 +17,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
       - name: Execute test
-        run: pytest --cov-report=xml --cov=.
+        run: python -m pytest --cov-report=xml --cov=.
 
   validate_pull_request:
     runs-on: ubuntu-latest
@@ -39,7 +39,7 @@ jobs:
         pip install -r requirements.txt
 
     - name: Run tests with coverage
-      run: pytest --cov-report=xml --cov=.
+      run: python -m pytest --cov-report=xml --cov=.
 
     - name: Calculate coverage percentage
       id: calculate_coverage
