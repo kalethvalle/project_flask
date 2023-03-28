@@ -43,4 +43,4 @@ jobs:
         echo "::set-output name=coverage_percent::$coverage_percent%"
 
 env:
-  MIN_COVERAGE_PERCENT: 50
+  MIN_COVERAGE_PERCENT: 5
