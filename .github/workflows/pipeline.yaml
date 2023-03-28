@@ -61,4 +61,4 @@ jobs:
         fi
 
 env:
-  MIN_COVERAGE_PERCENT: 10
+  MIN_COVERAGE_PERCENT: 60
