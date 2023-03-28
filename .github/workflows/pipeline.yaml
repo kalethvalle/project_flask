@@ -40,7 +40,10 @@ jobs:
 
     - name: Run tests with coverage
       run: python -m pytest --cov-report=xml --cov=.
-
+      
+    - name: Install xmlstarlet
+      run: sudo apt-get update && sudo apt-get install -y xmlstarlet
+      
     - name: Calculate coverage percentage
       id: calculate_coverage
       run: |
