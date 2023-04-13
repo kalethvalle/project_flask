@@ -4,7 +4,8 @@
 - `pip install -r requirements.txt`
 
 #### Execute Test and coverage
-- python -m pytest --cov-report html --cov=.
+- coverage run -m pytest -v -s
+- coverage html
 
 #### Run Project
 - `python app.py`
